@@ -1,16 +1,17 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../hooks/appHooks'
-import { addTodo,removeTodo, submitTodo } from '../features/todo/todoSlice';
+import { addTodo,clearTodo,removeTodo, submitTodo, updateCompleteTodo, updateTodo } from '../features/todo/todoSlice';
 
 const Home = () => { 
  const dispatch=  useAppDispatch();
+ const [update,setUpdate]=React.useState(false)
 const todoList= useAppSelector(state => state.todoSlicer.todos);
 const todoState= useAppSelector(state => state.todoSlicer.todoItems);
 
 
   const handleSubmit=()=>{
-  
+  dispatch(clearTodo())
    dispatch(
     addTodo({
       id:Math.random(),
@@ -19,6 +20,16 @@ const todoState= useAppSelector(state => state.todoSlicer.todoItems);
     })
     
    )
+  }
+  const handleUpdate=()=>{
+    setUpdate(false)
+    dispatch(clearTodo())
+    dispatch(updateCompleteTodo({
+      id:Math.random(),
+      text:todoState
+    })
+    )
+
   }
   return (
     <SafeAreaView style={{flex:1}}>
@@ -44,6 +55,26 @@ const todoState= useAppSelector(state => state.todoSlicer.todoItems);
         }}
        
        />
+     {
+       update ?
+       <TouchableOpacity
+
+       onPress={()=>handleUpdate()}
+       style={{
+          backgroundColor:'rgb(0, 204, 255)',
+          height: 40,
+          marginTop: 10,
+          marginLeft: 10,
+          marginRight: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+
+       }}
+       >
+         <Text>UPDATE</Text>
+       </TouchableOpacity>
+       
+       :
        <TouchableOpacity
 
        onPress={()=>handleSubmit()}
@@ -60,6 +91,7 @@ const todoState= useAppSelector(state => state.todoSlicer.todoItems);
        >
          <Text>ADD</Text>
        </TouchableOpacity>
+     }
        <Text
        style={{
           fontSize: 20,
@@ -84,7 +116,10 @@ TODO ITEM
           >
             <Text>{todo.text}</Text>
             <TouchableOpacity
-         
+          onPress={()=>{
+            dispatch(updateTodo(todo))
+            setUpdate(true)
+          }}
            >
              <Text
              style={{

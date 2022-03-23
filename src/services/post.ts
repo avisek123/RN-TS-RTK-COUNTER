@@ -16,6 +16,7 @@ export const postApi = createApi({
   endpoints: (builder) => ({
     getPost: builder.query<IPost[], void>({
       query: () => "/",
+      transformResponse:(response : IPost[])=>response?.slice(0,10),
   
     }),
     

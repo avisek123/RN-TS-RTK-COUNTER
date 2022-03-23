@@ -7,7 +7,12 @@ const Home = () => {
   console.log(data)
   return (
     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-      <Text>Home</Text>
+      {
+        isLoading?
+        <Text>Loading...</Text>
+        :
+        <Text>Home</Text>
+      }
     </View>
   )
 }

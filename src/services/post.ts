@@ -34,6 +34,7 @@ export const postApi = createApi({
         method: 'post',
         // body: patch,
       }),
+      invalidatesTags: ["Post"],
      
     }),
     

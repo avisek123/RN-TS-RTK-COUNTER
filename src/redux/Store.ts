@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import  authSlice  from "../features/auth/AuthSlicer";
 import CounterReducer from '../features/counter/counterSlice';
+import modalSlice from "../features/modal/modalSlice";
 import todoSlice from "../features/todo/todoSlice";
 import { postApi } from "../services/post";
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
         counter: CounterReducer,
         todoSlicer: todoSlice,
         authSlicer: authSlice,
+        modalSlicer: modalSlice,
         [postApi.reducerPath]: postApi.reducer,
       
     },

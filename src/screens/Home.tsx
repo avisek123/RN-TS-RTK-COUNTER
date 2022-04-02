@@ -1,53 +1,106 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, Button, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../hooks/appHooks'
-import MyModal from '../component/MyModal'
+import { useGetPokemonByNameQuery } from '../services/Pokemon'
 const Home = () => {
  const auth= useAppSelector(state=>state.authSlicer?.isLoggedIn)
  const modalText = useAppSelector(state=>state.modalSlicer?.modalContent)
  const dispatch=  useAppDispatch();
  const [myModal,setMyModal]= React.useState(false)
-
+ const [name, setName] = React.useState("");
+ const {data,isLoading,error,isFetching}=  useGetPokemonByNameQuery(name);
+ const [input,setInput]= React.useState('');
  
+  const handlePress=()=>{
+    if(!input) 
+    return Alert.alert("Please enter a name");
+    console.log("input",input)
+    setName(input)
+    setInput('')
+    
+
+  }   
+console.log(isLoading)
+
+   
+         
   return (
-    <View
+    <SafeAreaView
     style={{
-      flex:1,
-      justifyContent:'center',
-      alignItems:'center'
+      flex:1
     }}
     >
-      <Text
+      <View
       style={{
-        fontSize:20,
+        padding:20
       }}
       >
-      {
-        auth ? `Logged In ${modalText}` : `Not Logged In ${modalText}`
-      }
-    </Text>
+        <Text
+        style={{
+          fontSize:17,
+          fontWeight:"bold",
+          color:'#000'
+        }}
+        >Enter a Pokemon Name</Text>
+        <TextInput
+        placeholder='Enter a Pokemon Name'
+        style={{
+          borderWidth:1,
+          borderColor:'#000',
+          padding:10,
+          marginTop:10,
+          marginBottom:10
+        }}
+        value={input}
+        onChangeText={text=>setInput(text)}
+        
+        />
+       <View
+       style={{ 
+         marginTop:20
+       }}
+       >
+       <Button
+        title="Search"
+        onPress={handlePress}
+      
+          />
+       </View>     
+   
+      <View
+      style={{
+        alignSelf:'center',
+        marginTop:70
+      }}
+      >
+      {error ? (
+        <Text>Oh no, there was an error</Text>
+      ) : isFetching ? (
+        <Text>Loading...</Text>
+      ) : data ? (
+        <>
+          <Image
+          source={{uri:data.sprites.front_shiny}}
+          style={{
+            width:200,
+            height:200,
+          }}
+          
+          />
+          <Text
+          style={{
+            textAlign:'center',
+          }}
+          >{data?.species?.name}</Text>
+        
+        </>
+      ) : <Text>No Data</Text>}
 
-    <Button
-    title='Open Modal'
-    onPress={()=>setMyModal(true)}
-    
-    />
-    <MyModal
-    myModal={myModal}
-    setMyModal={setMyModal}
-    
-    
-    />
+        </View>
 
-      {/* <Button
-      title='Login'
-      onPress={()=>dispatch(login())}
-      />
-      <Button
-     onPress={()=>dispatch(logout())}
-      title='Logout'
-      /> */}
-    </View>
+      </View>
+
+    </SafeAreaView>
   )
 }
 

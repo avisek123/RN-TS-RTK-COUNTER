@@ -1,26 +1,26 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { useAppSelector } from '../hooks/appHooks'
+import { useAppDispatch, useAppSelector } from '../hooks/appHooks'
+import { login, logout } from '../features/auth/AuthSlicer'
 const Home = () => {
  const auth= useAppSelector(state=>state.authSlicer?.isLoggedIn)
- console.log(auth)
+ const dispatch=  useAppDispatch();
+ 
   return (
     <View>
       <Text>
       {
         auth ? 'Logged In' : 'Not Logged In'
       }
-
-      </Text>
+    </Text>
 
       <Button
       title='Login'
-      
-      
+      onPress={()=>dispatch(login())}
       />
       <Button
+     onPress={()=>dispatch(logout())}
       title='Logout'
-      
       />
     </View>
   )

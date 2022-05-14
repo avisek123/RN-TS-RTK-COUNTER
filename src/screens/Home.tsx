@@ -13,7 +13,7 @@ const Home = () => {
  
   const handlePress=()=>{
     if(!input) 
-    return Alert.alert("Please enter a name");
+    return Alert.alert("Please enter a name   eee");
     console.log("input",input)
     setName(input)
     setInput('')
